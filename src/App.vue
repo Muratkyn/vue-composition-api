@@ -1,7 +1,10 @@
 <template>
   <section class="container">
-    <h2>{{ user }}</h2>
-    <h3>{{ age }}</h3>
+    <UserData
+      :first-name="user2.firstName"
+      :last-name="user2.lastName"
+      :user-age="age"
+    ></UserData>
     <p v-if="isVisible">Changed!</p>
     <button @click="changeAge">Change</button>
     <!-- <h2>{{ user1.name }}</h2> -->
@@ -13,12 +16,14 @@
 </template>
 
 <script setup>
-import { ref, computed, watch, reactive } from 'vue';
+import { ref, computed, watch, reactive, provide } from 'vue';
+import UserData from './components/UserData.vue';
 //import 'reactive' which is a bit like ref but explicilty for objects
 // const user1 = reactive({
 //   name: 'Murat',
 //   age: 30,
 // });
+//we can provide provide and inject
 
 const age = ref(30);
 const isVisible = ref(false);
@@ -27,9 +32,11 @@ const user2 = reactive({
   lastName: '',
 });
 
+provide('userAge', age);
+
 // computed is Readonly!
 const user = computed(() => {
-  return `${user2.firstName} ${user2.lastName}`;
+  return `${user2.firstName}  ${user2.lastName}`;
 });
 
 watch([age, user, user2.lastName], (newVals, oldVals) => {
